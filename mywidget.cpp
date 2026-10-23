@@ -1,8 +1,9 @@
-#include "mywidget.h"
+﻿#include "mywidget.h"
 #include "ui_mywidget.h"
 #include <QFileDialog>
 #include <QFile>
 #include <QDebug>
+#include <QStringConverter>
 
 QString fileName = "C:/Users/user/Documents/qt1019/myfile.txt";
 
@@ -44,6 +45,8 @@ void cbWrite(QString Filename, QString str){
         return;
     }
     QTextStream out(&outFile);
+    out.setEncoding(QStringConverter::Utf8);
+    out.setGenerateByteOrderMark(true);
     out << str;
     outFile.flush();
     outFile.close();
@@ -54,8 +57,12 @@ void MyWidget::on_exportButton_clicked(){
     fileName = QFileDialog:: getSaveFileName(this,"匯出通訊錄",".","csv(*.csv);;text(*.txt)");
     for(int i=0; i<ui->contactBook->rowCount(); i++){
         for(int j=0; j<ui->contactBook->columnCount(); j++){
-            saveFile += ui->contactBook->item(i, j)->text()+",";
-        }
+            QTableWidgetItem *item = ui->contactBook->item(i, j);
+            if (item != nullptr) {
+                saveFile += "=\"" + item->text() + "\",";
+            } else {
+                saveFile += ",";
+            }        }
         saveFile += "\n";
     }
     cbWrite(fileName, saveFile);

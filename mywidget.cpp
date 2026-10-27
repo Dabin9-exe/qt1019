@@ -67,4 +67,49 @@ void MyWidget::on_exportButton_clicked(){
     }
     cbWrite(fileName, saveFile);
 }
+void MyWidget::on_importButton_clicked(){
+    QString fileName = QFileDialog::getOpenFileName(this, "匯入通訊錄", ".", "CSV 檔案 (*.csv);;文字檔 (*.txt)");
+    if (fileName.isEmpty()) {
+        return; // 使用者取消選擇
+    }
+
+    QFile inFile(fileName);
+    if (!inFile.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Could not open file for read";
+        return;
+    }
+
+    QTextStream in(&inFile);
+    in.setEncoding(QStringConverter::Utf8);
+
+    // 清空目前表格中的舊資料（若希望保留舊資料並 append，可註解掉此行）
+    ui->contactBook->setRowCount(0);
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        if (line.isEmpty()) continue;
+
+        // 依逗號拆分欄位
+        QStringList fields = line.split(',');
+
+        int row = ui->contactBook->rowCount();
+        ui->contactBook->insertRow(row);
+
+        // 填入 4 個欄位 (學號、班級、姓名、電話)
+        for (int col = 0; col < 4 && col < fields.size(); ++col) {
+            QString val = fields[col].trimmed();
+
+            // 去除匯出時所加上 的 `="內容"` 格式或一般引號 `"`
+            if (val.startsWith("=\"") && val.endsWith("\"")) {
+                val = val.mid(2, val.length() - 3);
+            } else if (val.startsWith("\"") && val.endsWith("\"")) {
+                val = val.mid(1, val.length() - 2);
+            }
+
+            ui->contactBook->setItem(row, col, new QTableWidgetItem(val));
+        }
+    }
+
+    inFile.close();
+}
 

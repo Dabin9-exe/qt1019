@@ -78,9 +78,9 @@
   <widget class="QPushButton" name="insertButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>30</x>
      <y>530</y>
-     <width>261</width>
+     <width>221</width>
      <height>31</height>
     </rect>
    </property>
@@ -91,14 +91,27 @@
   <widget class="QPushButton" name="exportButton">
    <property name="geometry">
     <rect>
-     <x>420</x>
+     <x>530</x>
      <y>530</y>
-     <width>271</width>
+     <width>231</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
     <string>匯出</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="importButton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>530</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>匯入</string>
    </property>
   </widget>
  </widget>

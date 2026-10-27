@@ -22,6 +22,8 @@ private slots:
 
     void on_exportButton_clicked();
 
+    void on_importButton_clicked();
+
 private:
     Ui::MyWidget *ui;
 };
